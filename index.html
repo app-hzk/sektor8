@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sektor 8 SuperApp - Sistem Informasi & Profil Lingkungan RT</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    />
+    <!-- Font Awesome Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+        /* ============================================
+                   CSS VARIABLES & RESET
+                   ============================================ */
+        :root {
+            --green-dark: #1b5e20;
+            --green-primary: #2e7d32;
+            --green-medium: #43a047;
+            --green-light: #66bb6a;
+            --green-pale: #e8f5e9;
+            --yellow-primary: #ffc107;
+            --yellow-dark: #f9a825;
+            --yellow-light: #ffecb3;
+            --yellow-pale: #fff8e1;
+            --white: #ffffff;
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #eeeeee;
+            --gray-300: #e0e0e0;
+            --gray-400: #bdbdbd;
+            --gray-500: #9e9e9e;
+            --gray-600: #757575;
+            --gray-700: #616161;
+            --gray-800: #424242;
+            --gray-900: #212121;
+            --black: #111111;
+            --gradient-hero: linear-gradient(135deg, #1b5e20 0%, #2e7d32 30%, #43a047 60%, #66bb6a 100%);
+            --gradient-card: linear-gradient(135deg, #2e7d32, #43a047);
+            --gradient-accent: linear-gradient(135deg, #ffc107, #f9a825, #ff8f00);
+            --gradient-sidebar: linear-gradient(180deg, #1b5e20 0%, #2e7d32 50%, #1b5e20 100%);
+            --gradient-hero-overlay: linear-gradient(135deg, rgba(27, 94, 32, 0.92) 0%, rgba(46, 125, 50, 0.88) 40%, rgba(67, 160, 71, 0.85) 100%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.14);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.18);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-family);
+            border: none;
+            outline: none;
+            background: none;
+            transition: var(--transition);
+        }
+
+        input,
+        textarea,
+        select {
+            font-family: var(--font-family);
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            width: 100%;
+            outline: none;
+            background: var(--white);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--green-primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============================================
+                   SCROLLBAR
+                   ============================================ */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--green-light);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-primary);
+        }
+
+        /* ============================================
+                   LAYOUT - SIDEBAR & MAIN CONTENT
+                   ============================================ */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 260px;
+            background: var(--gradient-sidebar);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 1000;
+            transition: var(--transition-slow);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sidebar-brand .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-accent);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--black);
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand .brand-text h1 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-brand .brand-text p {
+            font-size: 0.65rem;
+            opacity: 0.75;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav .nav-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.5;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: rgba(255, 255, 255, 0.75);
+            font-weight: 500;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.16);
+            color: var(--white);
+            box-shadow: inset 3px 0 0 var(--yellow-primary);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            background: var(--yellow-primary);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--yellow-primary);
+            color: var(--black);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 0.7rem;
+            opacity: 0.65;
+            text-align: center;
+        }
+
+        /* === MOBILE TOGGLE === */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1100;
+            width: 44px;
+            height: 44px;
+            background: var(--green-primary);
+            color: var(--white);
+            border-radius: var(--radius-md);
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        .mobile-toggle:hover {
+            background: var(--green-dark);
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-slow);
+        }
+
+        /* === TOPBAR === */
+        .topbar {
+            background: var(--white);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar .topbar-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--gray-900);
+            letter-spacing: -0.02em;
+        }
+
+        .topbar .topbar-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .topbar-spacer {
+            flex: 1;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-topbar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--gray-100);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            position: relative;
+            transition: var(--transition);
+        }
+        .btn-topbar:hover {
+            background: var(--green-pale);
+            color: var(--green-primary);
+        }
+        .btn-topbar .notification-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--yellow-primary);
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .user-avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-card);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* === PAGE CONTENT === */
+        .page-content {
+            padding: 28px 32px;
+            flex: 1;
+        }
+
+        /* ============================================
+                   COMPONENTS
+                   ============================================ */
+        /* === CARDS === */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .card-header .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .card-header .card-icon.green {
+            background: var(--green-pale);
+            color: var(--green-primary);
+        }
+        .card-header .card-icon.yellow {
+            background: var(--yellow-pale);
+            color: var(--yellow-dark);
+        }
+        .card-header .card-icon.gray {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .card-header h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .card-header p {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* === STAT CARDS === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        .stat-card .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .stat-card .stat-icon.green {
+            background: var(--green-pale);
+            color: var(--green-primary);
+        }
+        .stat-card .stat-icon.yellow {
+            background: var(--yellow-light);
+            color: var(--yellow-dark);
+        }
+        .stat-card .stat-icon.gray {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .stat-card .stat-icon.dark {
+            background: var(--gray-900);
+            color: var(--yellow-primary);
+        }
+        .stat-card .stat-info h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+        .stat-card .stat-info p {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* === HERO BANNER === */
+        .hero-banner {
+            background: var(--gradient-hero-overlay);
+            border-radius: var(--radius-xl);
+            padding: 36px 32px;
+            color: var(--white);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: rgba(255, 193, 7, 0.12);
+        }
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .hero-banner h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-banner p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            max-width: 500px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-banner .hero-cta {
+            margin-top: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-accent);
+            color: var(--black);
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+        }
+        .hero-banner .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        /* === BUTTONS === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-family);
+        }
+        .btn-primary {
+            background: var(--green-primary);
+            color: var(--white);
+        }
+        .btn-primary:hover {
+            background: var(--green-dark);
+            box-shadow: 0 4px 16px rgba(46, 125, 50, 0.3);
+        }
+        .btn-yellow {
+            background: var(--yellow-primary);
+            color: var(--black);
+        }
+        .btn-yellow:hover {
+            background: var(--yellow-dark);
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--green-primary);
+            border: 2px solid var(--green-primary);
+        }
+        .btn-outline:hover {
+            background: var(--green-pale);
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+        }
+        .btn-danger {
+            background: #ef5350;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c62828;
+        }
+
+        /* === NEWS CARDS === */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .news-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        .news-card .news-image {
+            height: 180px;
+            background: var(--gradient-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .news-card .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-card .news-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--yellow-primary);
+            color: var(--black);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .news-card .news-body {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-card .news-body h4 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .news-card .news-body .news-meta {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .news-card .news-body p {
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            flex: 1;
+        }
+        .news-card .news-body .news-tags {
+            margin-top: 12px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .news-card .news-body .news-tags span {
+            font-size: 0.65rem;
+            background: var(--green-pale);
+            color: var(--green-primary);
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+        }
+
+        /* === COMPLAINT LIST === */
+        .complaint-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .complaint-item {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--green-primary);
+            transition: var(--transition);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .complaint-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+        .complaint-item.pending {
+            border-left-color: var(--yellow-primary);
+        }
+        .complaint-item.resolved {
+            border-left-color: var(--green-light);
+            opacity: 0.75;
+        }
+        .complaint-item .complaint-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--green-pale);
+            color: var(--green-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .complaint-item .complaint-content h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .complaint-item .complaint-content p {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin: 2px 0 6px;
+        }
+        .complaint-item .complaint-content .complaint-status {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            display: inline-block;
+        }
+        .complaint-item .complaint-content .complaint-status.pending {
+            background: var(--yellow-pale);
+            color: var(--yellow-dark);
+        }
+        .complaint-item .complaint-content .complaint-status.resolved {
+            background: var(--green-pale);
+            color: var(--green-primary);
+        }
+
+        /* === MODAL === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal .form-group {
+            margin-bottom: 14px;
+        }
+        .modal .form-group label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-500);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 12px;
+        }
+        .empty-state h4 {
+            font-size: 1rem;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        .empty-state p {
+            font-size: 0.8rem;
+        }
+
+        /* === TIMELINE === */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: var(--gray-300);
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--green-primary);
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 3px var(--green-pale);
+        }
+        .timeline-item .timeline-content {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+        .timeline-item .timeline-content h5 {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+        .timeline-item .timeline-content .timeline-date {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+        }
+
+        /* === TOAST === */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.35s ease, fadeOut 0.35s ease 2.8s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 380px;
+        }
+        .toast.success {
+            background: var(--green-primary);
+        }
+        .toast.error {
+            background: #ef5350;
+        }
+        .toast.warning {
+            background: var(--yellow-dark);
+            color: var(--black);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .mobile-toggle {
+                display: flex;
+            }
+            .topbar {
+                padding: 14px 16px 14px 68px;
+            }
+            .page-content {
+                padding: 18px 16px;
+            }
+            .hero-banner {
+                padding: 24px 20px;
+            }
+            .hero-banner h2 {
+                font-size: 1.3rem;
+            }
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .stat-card {
+                padding: 14px;
+                gap: 10px;
+            }
+            .stat-card .stat-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            .stat-card .stat-info h2 {
+                font-size: 1.3rem;
+            }
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal {
+                padding: 20px;
+                margin: 10px;
+            }
+            .topbar .topbar-subtitle {
+                display: none;
+            }
+        }
+
+        /* === SIDEBAR OVERLAY === */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* === PAGE SECTION VISIBILITY === */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        /* === PROFILE SECTION === */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-card);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+        }
+        .profile-info h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+        .profile-info p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .org-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .org-card {
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 120px;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        .org-card:hover {
+            border-color: var(--green-light);
+            box-shadow: var(--shadow-sm);
+        }
+        .org-card .org-name {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--gray-900);
+        }
+        .org-card .org-role {
+            font-size: 0.68rem;
+            color: var(--gray-500);
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+    SIDEBAR OVERLAY (Mobile)
+    ============================================ -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============================================
+    MOBILE TOGGLE BUTTON
+    ============================================ -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- ============================================
+    APP CONTAINER
+    ============================================ -->
+    <div class="app-container">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">S8</div>
+                <div class="brand-text">
+                    <h1>Sektor 8</h1>
+                    <p>SuperApp · RT Lingkungan</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="nav-label">Menu Utama</p>
+
+                <a href="#" class="nav-item active" data-page="dashboard" title="Dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="profil" title="Profil Lingkungan">
+                    <i class="fas fa-users"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="#" class="nav-item" data-page="berita" title="Berita & Informasi">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Berita</span>
+                    <span class="badge" id="newsBadgeNav">0</span>
+                </a>
+                <a href="#" class="nav-item" data-page="keluhan" title="Keluhan Warga">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Keluhan</span>
+                    <span class="badge" id="complaintBadgeNav">0</span>
+                </a>
+
+                <p class="nav-label" style="margin-top: 16px">Manajemen</p>
+                <a href="#" class="nav-item" data-page="buat-postingan" title="Buat Postingan">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Buat Postingan</span>
+                </a>
+                <a href="#" class="nav-item" data-page="kelola-halaman" title="Kelola Halaman">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Kelola Halaman</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>© 2026 Sektor 8 SuperApp</p>
+                <p style="font-size: 0.65rem; margin-top: 2px">v1.0.0 · GitHub Pages</p>
+            </div>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div>
+                    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+                    <div class="topbar-subtitle" id="topbarSubtitle">Sistem Informasi & Profil Lingkungan RT</div>
+                </div>
+                <div class="topbar-spacer"></div>
+                <div class="topbar-actions">
+                    <button class="btn-topbar" title="Notifikasi">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="btn-topbar" title="Pengaturan" onclick="showToast('Pengaturan segera hadir', 'warning')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="user-avatar-sm" title="Admin Sektor 8">AD</div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- ====== DASHBOARD SECTION ====== -->
+                <section class="page-section active" id="page-dashboard">
+                    <!-- Hero Banner -->
+                    <div class="hero-banner">
+                        <h2>🏡 Selamat Datang di Sektor 8 SuperApp</h2>
+                        <p>Sistem informasi terintegrasi untuk warga RT 08. Akses berita terkini, profil lingkungan, dan sampaikan keluhan Anda dengan mudah.</p>
+                        <a href="#" class="hero-cta" onclick="switchPage('profil')">
+                            <i class="fas fa-arrow-right"></i> Lihat Profil Lingkungan
+                        </a>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid" id="dashboardStats">
+                        <div class="stat-card" onclick="switchPage('berita')">
+                            <div class="stat-icon green"><i class="fas fa-newspaper"></i></div>
+                            <div class="stat-info">
+                                <h2 id="statNews">0</h2>
+                                <p>Total Berita</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" onclick="switchPage('keluhan')">
+                            <div class="stat-icon yellow"><i class="fas fa-comment-dots"></i></div>
+                            <div class="stat-info">
+                                <h2 id="statComplaints">0</h2>
+                                <p>Keluhan Masuk</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" onclick="switchPage('profil')">
+                            <div class="stat-icon gray"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h2 id="statFamilies">128</h2>
+                                <p>Kepala Keluarga</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" onclick="switchPage('buat-postingan')">
+                            <div class="stat-icon dark"><i class="fas fa-plus"></i></div>
+                            <div class="stat-info">
+                                <h2 style="font-size: 1.2rem">Buat</h2>
+                                <p>Postingan Baru</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent News & Timeline -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; flex-wrap: wrap" class="dashboard-lower">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon green"><i class="fas fa-clock"></i></div>
+                                <div>
+                                    <h3>Berita Terbaru</h3>
+                                    <p>Update informasi terkini dari lingkungan</p>
+                                </div>
+                            </div>
+                            <div id="dashboardRecentNews" style="display: flex; flex-direction: column; gap: 10px">
+                                <!-- Populated by JS -->
+                                <div class="empty-state">
+                                    <i class="fas fa-newspaper"></i>
+                                    <h4>Belum ada berita</h4>
+                                    <p>Buat postingan pertama Anda!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon yellow"><i class="fas fa-calendar"></i></div>
+                                <div>
+                                    <h3>Agenda Kegiatan</h3>
+                                    <p>Jadwal kegiatan lingkungan</p>
+                                </div>
+                            </div>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <h5>Kerja Bakti Mingguan</h5>
+                                        <p class="timeline-date">Minggu, 08:00 WIB</p>
+                                        <p style="font-size: 0.75rem">Seluruh warga diharapkan hadir.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <h5>Posyandu Balita</h5>
+                                        <p class="timeline-date">Rabu, 09:00 WIB</p>
+                                        <p style="font-size: 0.75rem">Balai RT 08.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <h5>Rapat Warga Bulanan</h5>
+                                        <p class="timeline-date">Sabtu, 19:30 WIB</p>
+                                        <p style="font-size: 0.75rem">Pembahasan program lingkungan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ====== PROFIL SECTION ====== -->
+                <section class="page-section" id="page-profil">
+                    <div class="card" style="margin-bottom: 20px">
+                        <div class="profile-header">
+                            <div class="profile-avatar">S8</div>
+                            <div class="profile-info">
+                                <h2>Sektor 8 · RT 08 / RW 03</h2>
+                                <p>Kelurahan Contoh Jaya, Kecamatan Contoh Makmur</p>
+                                <p style="font-size: 0.78rem; color: var(--green-primary); font-weight: 600">
+                                    <i class="fas fa-map-marker-alt"></i> Jl. Merdeka No. 8, Komplek Sejahtera
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px" class="profile-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon green"><i class="fas fa-bullseye"></i></div>
+                                <div>
+                                    <h3>Visi & Misi</h3>
+                                    <p>Tujuan lingkungan kami</p>
+                                </div>
+                            </div>
+                            <p style="font-weight: 700; color: var(--green-primary); font-size: 0.9rem; margin-bottom: 8px">Visi:</p>
+                            <p style="font-size: 0.85rem; margin-bottom: 16px">
+                                Mewujudkan lingkungan Sektor 8 yang bersih, aman, harmonis, dan berdaya saing dengan semangat gotong royong.
+                            </p>
+                            <p style="font-weight: 700; color: var(--green-primary); font-size: 0.9rem; margin-bottom: 8px">Misi:</p>
+                            <ul style="font-size: 0.82rem; padding-left: 18px; color: var(--gray-600)">
+                                <li>Meningkatkan kebersihan dan keindahan lingkungan.</li>
+                                <li>Membangun keamanan dan ketertiban bersama.</li>
+                                <li>Mendorong partisipasi aktif warga.</li>
+                                <li>Mengembangkan ekonomi kreatif warga.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon yellow"><i class="fas fa-sitemap"></i></div>
+                                <div>
+                                    <h3>Struktur Organisasi</h3>
+                                    <p>Pengurus RT periode 2024–2027</p>
+                                </div>
+                            </div>
+                            <div class="org-chart">
+                                <div class="org-row">
+                                    <div class="org-card">
+                                        <div class="org-name">Bapak Ahmad Suhendra</div>
+                                        <div class="org-role">Ketua RT 08</div>
+                                    </div>
+                                </div>
+                                <div class="org-row">
+                                    <div class="org-card">
+                                        <div class="org-name">Bapak Dedi Kurniawan</div>
+                                        <div class="org-role">Sekretaris</div>
+                                    </div>
+                                    <div class="org-card">
+                                        <div class="org-name">Bapak Suryadi</div>
+                                        <div class="org-role">Bendahara</div>
+                                    </div>
+                                </div>
+                                <div class="org-row">
+                                    <div class="org-card">
+                                        <div class="org-name">Bapak Haryanto</div>
+                                        <div class="org-role">Keamanan</div>
+                                    </div>
+                                    <div class="org-card">
+                                        <div class="org-name">Ibu Ratna Dewi</div>
+                                        <div class="org-role">Kebersihan</div>
+                                    </div>
+                                    <div class="org-card">
+                                        <div class="org-name">Bapak Joko Susilo</div>
+                                        <div class="org-role">Pemuda</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ====== BERITA SECTION ====== -->
+                <section class="page-section" id="page-berita">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px">
+                        <div>
+                            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--gray-900)">📰 Berita & Informasi</h2>
+                            <p style="font-size: 0.82rem; color: var(--gray-500)">Kabar terbaru dari lingkungan Sektor 8</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openCreatePostModal()">
+                            <i class="fas fa-plus"></i> Buat Postingan
+                        </button>
+                    </div>
+                    <div class="news-grid" id="newsGrid">
+                        <!-- Populated by JS -->
+                        <div class="empty-state" style="grid-column: 1/-1">
+                            <i class="fas fa-newspaper"></i>
+                            <h4>Belum ada berita</h4>
+                            <p>Klik tombol "Buat Postingan" untuk membuat berita pertama.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ====== KELUHAN SECTION ====== -->
+                <section class="page-section" id="page-keluhan">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px">
+                        <div>
+                            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--gray-900)">💬 Keluhan Warga</h2>
+                            <p style="font-size: 0.82rem; color: var(--gray-500)">Sampaikan keluhan atau masukan Anda</p>
+                        </div>
+                        <button class="btn btn-yellow" onclick="openComplaintModal()">
+                            <i class="fas fa-plus"></i> Ajukan Keluhan
+                        </button>
+                    </div>
+                    <div class="complaint-list" id="complaintList">
+                        <!-- Populated by JS -->
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <h4>Tidak ada keluhan</h4>
+                            <p>Belum ada keluhan yang diajukan.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ====== BUAT POSTINGAN SECTION ====== -->
+                <section class="page-section" id="page-buat-postingan">
+                    <div class="card" style="max-width: 700px">
+                        <div class="card-header">
+                            <div class="card-icon green"><i class="fas fa-pen"></i></div>
+                            <div>
+                                <h3>Buat Postingan Baru</h3>
+                                <p>Publikasikan berita atau informasi untuk warga</p>
+                            </div>
+                        </div>
+                        <form id="createPostForm" onsubmit="handleCreatePost(event)">
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="postTitle">Judul Postingan</label>
+                                <input type="text" id="postTitle" placeholder="Masukkan judul berita..." required />
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="postCategory">Kategori</label>
+                                <select id="postCategory">
+                                    <option value="Informasi">Informasi</option>
+                                    <option value="Kegiatan">Kegiatan</option>
+                                    <option value="Pengumuman">Pengumuman</option>
+                                    <option value="Keamanan">Keamanan</option>
+                                    <option value="Kebersihan">Kebersihan</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="postContent">Konten</label>
+                                <textarea id="postContent" rows="5" placeholder="Tulis isi berita di sini..." required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="postAuthor">Nama Penulis</label>
+                                <input type="text" id="postAuthor" value="Admin Sektor 8" required />
+                            </div>
+                            <div class="modal-actions" style="margin-top: 8px">
+                                <button type="button" class="btn btn-outline" onclick="this.form.reset()">Reset</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Publikasikan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ====== KELOLA HALAMAN SECTION ====== -->
+                <section class="page-section" id="page-kelola-halaman">
+                    <div class="card" style="max-width: 700px">
+                        <div class="card-header">
+                            <div class="card-icon yellow"><i class="fas fa-file"></i></div>
+                            <div>
+                                <h3>Kelola Halaman</h3>
+                                <p>Buat halaman kustom untuk situs Anda</p>
+                            </div>
+                        </div>
+                        <form id="createPageForm" onsubmit="handleCreatePage(event)">
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="pageTitle">Judul Halaman</label>
+                                <input type="text" id="pageTitle" placeholder="Masukkan judul halaman..." required />
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="pageSlug">Slug (URL)</label>
+                                <input type="text" id="pageSlug" placeholder="contoh: tentang-kami" required pattern="[a-z0-9-]+" />
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px">
+                                <label for="pageContent">Konten Halaman</label>
+                                <textarea id="pageContent" rows="6" placeholder="Tulis konten halaman..." required></textarea>
+                            </div>
+                            <div class="modal-actions" style="margin-top: 8px">
+                                <button type="button" class="btn btn-outline" onclick="this.form.reset()">Reset</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan Halaman
+                                </button>
+                            </div>
+                        </form>
+                        <hr style="margin: 20px 0; border-color: var(--gray-200)" />
+                        <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 12px">Halaman Tersimpan:</h4>
+                        <div id="savedPagesList" style="display: flex; flex-direction: column; gap: 8px">
+                            <!-- Populated by JS -->
+                            <p style="font-size: 0.82rem; color: var(--gray-500)">Belum ada halaman tersimpan.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================
+    MODAL: CREATE POST
+    ============================================ -->
+    <div class="modal-overlay" id="createPostModal">
+        <div class="modal">
+            <h3><i class="fas fa-pen" style="color: var(--green-primary)"></i> Buat Postingan</h3>
+            <form id="modalCreatePostForm" onsubmit="handleModalCreatePost(event)">
+                <div class="form-group">
+                    <label>Judul</label>
+                    <input type="text" id="modalPostTitle" placeholder="Judul berita..." required />
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="modalPostCategory">
+                        <option value="Informasi">Informasi</option>
+                        <option value="Kegiatan">Kegiatan</option>
+                        <option value="Pengumuman">Pengumuman</option>
+                        <option value="Keamanan">Keamanan</option>
+                        <option value="Kebersihan">Kebersihan</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Konten</label>
+                    <textarea id="modalPostContent" rows="4" placeholder="Tulis isi berita..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Penulis</label>
+                    <input type="text" id="modalPostAuthor" value="Admin Sektor 8" required />
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('createPostModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================
+    MODAL: CREATE COMPLAINT
+    ============================================ -->
+    <div class="modal-overlay" id="complaintModal">
+        <div class="modal">
+            <h3><i class="fas fa-comment-dots" style="color: var(--yellow-dark)"></i> Ajukan Keluhan</h3>
+            <form id="complaintForm" onsubmit="handleSubmitComplaint(event)">
+                <div class="form-group">
+                    <label>Nama Anda</label>
+                    <input type="text" id="complaintName" placeholder="Nama lengkap..." required />
+                </div>
+                <div class="form-group">
+                    <label>Kategori Keluhan</label>
+                    <select id="complaintCategory">
+                        <option value="Kebersihan">Kebersihan</option>
+                        <option value="Keamanan">Keamanan</option>
+                        <option value="Infrastruktur">Infrastruktur</option>
+                        <option value="Lingkungan">Lingkungan</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi Keluhan</label>
+                    <textarea id="complaintDesc" rows="4" placeholder="Jelaskan keluhan Anda..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('complaintModal')">Batal</button>
+                    <button type="submit" class="btn btn-yellow"><i class="fas fa-paper-plane"></i> Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================
+    TOAST CONTAINER
+    ============================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+        (function() {
+            // ============================================
+            // DATA STORE
+            // ============================================
+            const STORAGE_KEYS = {
+                posts: 's8_posts',
+                complaints: 's8_complaints',
+                pages: 's8_pages',
+            };
+
+            function getData(key, fallback) {
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : fallback;
+                } catch {
+                    return fallback;
+                }
+            }
+
+            function setData(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            }
+
+            // Seed data
+            function seedData() {
+                const posts = getData(STORAGE_KEYS.posts, null);
+                if (!posts) {
+                    const initialPosts = [{
+                        id: 'p1',
+                        title: 'Gotong Royong Bersih-Bersih Lingkungan',
+                        category: 'Kegiatan',
+                        content: 'Mari bersama-sama membersihkan lingkungan Sektor 8. Kegiatan akan dilaksanakan hari Minggu pagi. Seluruh warga diharapkan hadir dengan membawa peralatan kebersihan masing-masing.',
+                        author: 'Admin Sektor 8',
+                        date: '2026-08-18T08:00:00.000Z',
+                    }, {
+                        id: 'p2',
+                        title: 'Pengumuman: Jadwal Rapat Warga Bulanan',
+                        category: 'Pengumuman',
+                        content: 'Rapat warga bulanan akan dilaksanakan pada hari Sabtu malam di Balai RT. Agenda utama: pembahasan program keamanan lingkungan dan perencanaan kegiatan 17 Agustus.',
+                        author: 'Bapak Ahmad Suhendra',
+                        date: '2026-08-15T10:30:00.000Z',
+                    }, {
+                        id: 'p3',
+                        title: 'Tips Keamanan Rumah Saat Mudik',
+                        category: 'Keamanan',
+                        content: 'Pastikan rumah dalam kondisi terkunci rapat, matikan aliran listrik yang tidak perlu, dan titipkan kunci kepada tetangga terpercaya. Laporkan ke petugas keamanan jika meninggalkan rumah lebih dari 3 hari.',
+                        author: 'Bapak Haryanto',
+                        date: '2026-08-12T14:00:00.000Z',
+                    }];
+                    setData(STORAGE_KEYS.posts, initialPosts);
+                }
+
+                const complaints = getData(STORAGE_KEYS.complaints, null);
+                if (!complaints) {
+                    const initialComplaints = [{
+                        id: 'c1',
+                        name: 'Ibu Siti Rahayu',
+                        category: 'Kebersihan',
+                        description: 'Sampah di depan gang 3 belum diangkut selama 3 hari. Mohon segera ditindaklanjuti.',
+                        status: 'pending',
+                        date: '2026-08-20T07:00:00.000Z',
+                    }, {
+                        id: 'c2',
+                        name: 'Bapak Andi Wijaya',
+                        category: 'Infrastruktur',
+                        description: 'Lampu penerangan jalan di dekat pos ronda sudah mati. Mohon diganti untuk keamanan bersama.',
+                        status: 'resolved',
+                        date: '2026-08-19T19:30:00.000Z',
+                    }];
+                    setData(STORAGE_KEYS.complaints, initialComplaints);
+                }
+
+                const pages = getData(STORAGE_KEYS.pages, null);
+                if (!pages) {
+                    setData(STORAGE_KEYS.pages, [{
+                        id: 'pg1',
+                        title: 'Tentang Kami',
+                        slug: 'tentang-kami',
+                        content: 'Sektor 8 SuperApp adalah platform digital untuk warga RT 08/RW 03. Kami berkomitmen untuk membangun lingkungan yang informatif, transparan, dan partisipatif.',
+                        date: '2026-08-01T00:00:00.000Z',
+                    }]);
+                }
+            }
+
+            seedData();
+
+            // ============================================
+            // STATE
+            // ============================================
+            let currentPage = 'dashboard';
+            let posts = getData(STORAGE_KEYS.posts, []);
+            let complaints = getData(STORAGE_KEYS.complaints, []);
+            let pages = getData(STORAGE_KEYS.pages, []);
+
+            // ============================================
+            // DOM REFERENCES
+            // ============================================
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobileToggle = document.getElementById('mobileToggle');
+            const topbarTitle = document.getElementById('topbarTitle');
+            const topbarSubtitle = document.getElementById('topbarSubtitle');
+            const newsGrid = document.getElementById('newsGrid');
+            const complaintList = document.getElementById('complaintList');
+            const savedPagesList = document.getElementById('savedPagesList');
+            const dashboardRecentNews = document.getElementById('dashboardRecentNews');
+            const toastContainer = document.getElementById('toastContainer');
+
+            // ============================================
+            // NAVIGATION
+            // ============================================
+            function switchPage(pageId) {
+                currentPage = pageId;
+                // Update sections
+                document.querySelectorAll('.page-section').forEach(sec => {
+                    sec.classList.remove('active');
+                });
+                const targetSection = document.getElementById('page-' + pageId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                // Update nav items
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.page === pageId);
+                });
+                // Update topbar
+                const pageTitles = {
+                    dashboard: 'Dashboard',
+                    profil: 'Profil Lingkungan',
+                    berita: 'Berita & Informasi',
+                    keluhan: 'Keluhan Warga',
+                    'buat-postingan': 'Buat Postingan',
+                    'kelola-halaman': 'Kelola Halaman',
+                };
+                const pageSubtitles = {
+                    dashboard: 'Sistem Informasi & Profil Lingkungan RT',
+                    profil: 'Informasi lengkap tentang lingkungan Sektor 8',
+                    berita: 'Kabar terbaru dari lingkungan Sektor 8',
+                    keluhan: 'Sampaikan dan pantau keluhan warga',
+                    'buat-postingan': 'Publikasikan informasi untuk warga',
+                    'kelola-halaman': 'Kelola halaman kustom situs',
+                };
+                topbarTitle.textContent = pageTitles[pageId] || 'Dashboard';
+                topbarSubtitle.textContent = pageSubtitles[pageId] || '';
+
+                // Close mobile sidebar
+                closeSidebar();
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Refresh content
+                renderAll();
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            }
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('active');
+            }
+
+            // Navigation event listeners
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchPage(item.dataset.page);
+                });
+            });
+
+            mobileToggle.addEventListener('click', () => {
+                if (sidebar.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // ============================================
+            // RENDER FUNCTIONS
+            // ============================================
+            function renderAll() {
+                renderNews();
+                renderComplaints();
+                renderPagesList();
+                renderDashboard();
+                renderBadges();
+            }
+
+            function renderBadges() {
+                const newsBadge = document.getElementById('newsBadgeNav');
+                const complaintBadge = document.getElementById('complaintBadgeNav');
+                const pendingComplaints = complaints.filter(c => c.status === 'pending').length;
+                newsBadge.textContent = posts.length;
+                complaintBadge.textContent = pendingComplaints;
+                // Badge hidden if zero
+                newsBadge.style.display = posts.length > 0 ? 'inline-block' : 'none';
+                complaintBadge.style.display = pendingComplaints > 0 ? 'inline-block' : 'none';
+            }
+
+            function renderNews() {
+                if (posts.length === 0) {
+                    newsGrid.innerHTML =
+                        '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-newspaper"></i><h4>Belum ada berita</h4><p>Buat postingan pertama Anda!</p></div>';
+                    return;
+                }
+                const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+                newsGrid.innerHTML = sorted.map(post => {
+                    const dateStr = new Date(post.date).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    return `
+                            <div class="news-card" onclick="viewPost('${post.id}')">
+                                <div class="news-image">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span class="news-badge">${escapeHtml(post.category)}</span>
+                                </div>
+                                <div class="news-body">
+                                    <h4>${escapeHtml(post.title)}</h4>
+                                    <div class="news-meta">
+                                        <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+                                        <span><i class="fas fa-calendar"></i> ${dateStr}</span>
+                                    </div>
+                                    <p>${escapeHtml(post.content.substring(0, 120))}...</p>
+                                    <div class="news-tags">
+                                        <span>${escapeHtml(post.category)}</span>
+                                        <span>Sektor 8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                }).join('');
+            }
+
+            function renderComplaints() {
+                if (complaints.length === 0) {
+                    complaintList.innerHTML =
+                        '<div class="empty-state"><i class="fas fa-inbox"></i><h4>Tidak ada keluhan</h4><p>Belum ada keluhan yang diajukan.</p></div>';
+                    return;
+                }
+                const sorted = [...complaints].sort((a, b) => new Date(b.date) - new Date(a.date));
+                complaintList.innerHTML = sorted.map(c => {
+                    const dateStr = new Date(c.date).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    const statusClass = c.status === 'resolved' ? 'resolved' : 'pending';
+                    const statusLabel = c.status === 'resolved' ? 'Selesai' : 'Diproses';
+                    const initial = c.name.charAt(0).toUpperCase();
+                    return `
+                            <div class="complaint-item ${statusClass}">
+                                <div class="complaint-avatar">${initial}</div>
+                                <div class="complaint-content">
+                                    <h4>${escapeHtml(c.name)} <span style="font-weight:400;font-size:0.7rem;color:var(--gray-500)">· ${dateStr}</span></h4>
+                                    <p><strong>${escapeHtml(c.category)}</strong> — ${escapeHtml(c.description)}</p>
+                                    <span class="complaint-status ${statusClass}">${statusLabel}</span>
+                                    ${c.status === 'pending' ? `
+                                        <button class="btn btn-sm btn-outline" style="margin-left:8px" onclick="resolveComplaint('${c.id}')">
+                                            <i class="fas fa-check"></i> Tandai Selesai
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                }).join('');
+            }
+
+            function renderPagesList() {
+                if (pages.length === 0) {
+                    savedPagesList.innerHTML =
+                        '<p style="font-size:0.82rem;color:var(--gray-500)">Belum ada halaman tersimpan.</p>';
+                    return;
+                }
+                savedPagesList.innerHTML = pages.map(p => `
+                        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--gray-50);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--gray-200)">
+                            <div>
+                                <strong style="font-size:0.82rem">${escapeHtml(p.title)}</strong>
+                                <span style="font-size:0.65rem;color:var(--gray-500)"> /${escapeHtml(p.slug)}</span>
+                            </div>
+                            <button class="btn btn-sm btn-danger" onclick="deletePage('${p.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `).join('');
+            }
+
+            function renderDashboard() {
+                // Stats
+                document.getElementById('statNews').textContent = posts.length;
+                document.getElementById('statComplaints').textContent = complaints.filter(c => c.status === 'pending')
+                    .length;
+
+                // Recent news
+                const recent = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+                if (recent.length === 0) {
+                    dashboardRecentNews.innerHTML =
+                        '<div class="empty-state"><i class="fas fa-newspaper"></i><h4>Belum ada berita</h4><p>Buat postingan pertama Anda!</p></div>';
+                } else {
+                    dashboardRecentNews.innerHTML = recent.map(post => {
+                        const dateStr = new Date(post.date).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                        return `
+                                <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-sm);background:var(--gray-50);cursor:pointer" onclick="switchPage('berita')">
+                                    <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:var(--green-pale);color:var(--green-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div style="flex:1;min-width:0">
+                                        <p style="font-size:0.8rem;font-weight:700;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(post.title)}</p>
+                                        <p style="font-size:0.68rem;color:var(--gray-500)">${dateStr} · ${escapeHtml(post.author)}</p>
+                                    </div>
+                                </div>
+                            `;
+                    }).join('');
+                }
+            }
+
+            // ============================================
+            // CRUD OPERATIONS
+            // ============================================
+            window.viewPost = function(id) {
+                const post = posts.find(p => p.id === id);
+                if (post) {
+                    const dateStr = new Date(post.date).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    alert(
+                        `📰 ${post.title}\n\n📁 Kategori: ${post.category}\n👤 Penulis: ${post.author}\n📅 Tanggal: ${dateStr}\n\n${post.content}`
+                        );
+                }
+            };
+
+            window.resolveComplaint = function(id) {
+                complaints = complaints.map(c => {
+                    if (c.id === id) {
+                        return { ...c, status: 'resolved' };
+                    }
+                    return c;
+                });
+                setData(STORAGE_KEYS.complaints, complaints);
+                renderAll();
+                showToast('Keluhan ditandai sebagai selesai ✅', 'success');
+            };
+
+            window.deletePage = function(id) {
+                if (confirm('Hapus halaman ini?')) {
+                    pages = pages.filter(p => p.id !== id);
+                    setData(STORAGE_KEYS.pages, pages);
+                    renderAll();
+                    showToast('Halaman berhasil dihapus', 'success');
+                }
+            };
+
+            // ============================================
+            // MODAL HANDLING
+            // ============================================
+            window.openCreatePostModal = function() {
+                document.getElementById('createPostModal').classList.add('active');
+            };
+
+            window.openComplaintModal = function() {
+                document.getElementById('complaintModal').classList.add('active');
+            };
+
+            window.closeModal = function(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            };
+
+            // Close modal on overlay click
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // ============================================
+            // FORM HANDLERS
+            // ============================================
+            function generateId(prefix) {
+                return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+            }
+
+            window.handleCreatePost = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('postTitle').value.trim();
+                const category = document.getElementById('postCategory').value;
+                const content = document.getElementById('postContent').value.trim();
+                const author = document.getElementById('postAuthor').value.trim() || 'Admin Sektor 8';
+
+                if (!title || !content) return;
+
+                const newPost = {
+                    id: generateId('p'),
+                    title,
+                    category,
+                    content,
+                    author,
+                    date: new Date().toISOString(),
+                };
+                posts.push(newPost);
+                setData(STORAGE_KEYS.posts, posts);
+                document.getElementById('createPostForm').reset();
+                renderAll();
+                switchPage('berita');
+                showToast('Postingan berhasil dipublikasikan! 🎉', 'success');
+            };
+
+            window.handleModalCreatePost = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('modalPostTitle').value.trim();
+                const category = document.getElementById('modalPostCategory').value;
+                const content = document.getElementById('modalPostContent').value.trim();
+                const author = document.getElementById('modalPostAuthor').value.trim() || 'Admin Sektor 8';
+
+                if (!title || !content) return;
+
+                const newPost = {
+                    id: generateId('p'),
+                    title,
+                    category,
+                    content,
+                    author,
+                    date: new Date().toISOString(),
+                };
+                posts.push(newPost);
+                setData(STORAGE_KEYS.posts, posts);
+                closeModal('createPostModal');
+                document.getElementById('modalCreatePostForm').reset();
+                renderAll();
+                showToast('Postingan berhasil dipublikasikan! 🎉', 'success');
+            };
+
+            window.handleSubmitComplaint = function(e) {
+                e.preventDefault();
+                const name = document.getElementById('complaintName').value.trim();
+                const category = document.getElementById('complaintCategory').value;
+                const description = document.getElementById('complaintDesc').value.trim();
+
+                if (!name || !description) return;
+
+                const newComplaint = {
+                    id: generateId('c'),
+                    name,
+                    category,
+                    description,
+                    status: 'pending',
+                    date: new Date().toISOString(),
+                };
+                complaints.push(newComplaint);
+                setData(STORAGE_KEYS.complaints, complaints);
+                closeModal('complaintModal');
+                document.getElementById('complaintForm').reset();
+                renderAll();
+                showToast('Keluhan berhasil diajukan! 🙏', 'success');
+            };
+
+            window.handleCreatePage = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('pageTitle').value.trim();
+                const slug = document.getElementById('pageSlug').value.trim().toLowerCase().replace(/\s+/g, '-');
+                const content = document.getElementById('pageContent').value.trim();
+
+                if (!title || !slug || !content) return;
+
+                const newPage = {
+                    id: generateId('pg'),
+                    title,
+                    slug,
+                    content,
+                    date: new Date().toISOString(),
+                };
+                pages.push(newPage);
+                setData(STORAGE_KEYS.pages, pages);
+                document.getElementById('createPageForm').reset();
+                renderAll();
+                showToast('Halaman berhasil disimpan! 📄', 'success');
+            };
+
+            // ============================================
+            // TOAST SYSTEM
+            // ============================================
+            window.showToast = function(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icon = type === 'success' ? 'fa-check-circle' :
+                    type === 'error' ? 'fa-exclamation-circle' :
+                    'fa-exclamation-triangle';
+                toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
+                }, 3200);
+            };
+
+            // ============================================
+            // ESCAPE HTML UTILITY
+            // ============================================
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ============================================
+            // INITIALIZATION
+            // ============================================
+            function init() {
+                renderAll();
+                // Set up responsive behavior
+                const handleResize = () => {
+                    if (window.innerWidth > 1024) {
+                        closeSidebar();
+                    }
+                };
+                window.addEventListener('resize', handleResize);
+                console.log('🏡 Sektor 8 SuperApp initialized successfully!');
+                console.log(`📊 Data: ${posts.length} posts, ${complaints.length} complaints, ${pages.length} pages`);
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
